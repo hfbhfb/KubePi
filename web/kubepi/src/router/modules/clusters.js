@@ -14,14 +14,27 @@ const Clusters = {
     },
     children: [
         {
+            // path: "tcpdump",
             path: "",
+            component: () => import("@/business/cluster-management/tcpdump"),
+            name: "Clusters",
+            meta: {
+                title: "网络报文抓取",
+                activeMenu: "/clusters",
+                // activeMenu: "/clusters/tcpdump",
+            }
+        },
+        {
+            path: "default",
             component: () => import("@/business/cluster-management"),
             name: "Clusters",
             meta: {
                 title: "business.cluster.list",
-                activeMenu: "/clusters",
+                activeMenu: "/clusters/default",
+                // activeMenu: "/clusters",
             }
         },
+
         {
             path: "create",
             component: () => import("@/business/cluster-management/create"),

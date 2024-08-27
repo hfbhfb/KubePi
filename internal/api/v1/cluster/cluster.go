@@ -17,6 +17,7 @@ import (
 	v1 "github.com/KubeOperator/kubepi/internal/model/v1"
 	v1Cluster "github.com/KubeOperator/kubepi/internal/model/v1/cluster"
 	"github.com/KubeOperator/kubepi/internal/server"
+	"github.com/KubeOperator/kubepi/internal/service/v1/capture"
 	"github.com/KubeOperator/kubepi/internal/service/v1/cluster"
 	"github.com/KubeOperator/kubepi/internal/service/v1/clusterbinding"
 	"github.com/KubeOperator/kubepi/internal/service/v1/common"
@@ -36,6 +37,7 @@ type Handler struct {
 	clusterRepoService    clusterrepo.Service
 	imageRepoService      imagerepo.Service
 	clusterAppService     clusterapp.Service
+	captureService        capture.Service
 }
 
 func NewHandler() *Handler {
@@ -45,6 +47,7 @@ func NewHandler() *Handler {
 		clusterRepoService:    clusterrepo.NewService(),
 		imageRepoService:      imagerepo.NewService(),
 		clusterAppService:     clusterapp.NewService(),
+		captureService:        capture.NewService(),
 	}
 }
 
@@ -630,4 +633,10 @@ func Install(parent iris.Party) {
 	sp.Get("/:name/repos/detail", handler.ListClusterReposDetail())
 	sp.Post("/:name/repos", handler.AddCLusterRepo())
 	sp.Delete("/:name/repos/:repo", handler.DeleteClusterRepo())
+
+	sp.Get("/captureall", handler.TaskGetAll())
+	sp.Post("/capturetask", handler.TaskPost())
+	sp.Get("/captureconfig", handler.ConfigGet())
+	sp.Post("/captureconfig", handler.ConfigPost())
+
 }
