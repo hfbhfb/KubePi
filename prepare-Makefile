@@ -1,0 +1,15 @@
+
+
+VAR1 := $(shell pwd)
+VAR2 := /d/projs/fork8sdir/code-ref/kube-pi
+
+# make clean -f prepare-Makefile
+# ifeq "$(VAR)" "/d/projs/fork8sdir/code-ref/kube-pi"
+ifeq ($(VAR1),$(VAR2))
+clean:
+	@echo "do not clean in source dir"
+else
+clean:
+	git reset --hard HEAD; git clean -xfd; #git clean -fd; #
+
+endif

@@ -1,0 +1,19 @@
+FROM node:18.10.0-alpine 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN apk add --no-cache make
+ARG NPM_REGISTRY="https://registry.npmmirror.com"
+ENV NPM_REGISTY=$NPM_REGISTRY
+
+LABEL stage=stage-web-build
+RUN set -ex \
+    && npm config set registry ${NPM_REGISTRY}
+
+WORKDIR /build/kubepi/web/terminal
+
+COPY web/terminal/package.json .
+RUN npm install
+
+COPY web/terminal .
+COPY web/kubepi /build/kubepi/web/kubepi
+COPY web/dashboard /build/kubepi/web/dashboard
+RUN  npm run-script build

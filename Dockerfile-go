@@ -1,0 +1,28 @@
+FROM kubeoperator/web-kubepi:master as web-kubepi
+FROM kubeoperator/web-dashboard:master as web-dashboard
+FROM kubeoperator/web-terminal:master as web-terminal
+
+
+FROM golang:1.22 
+
+ENV GOPROXY="https://goproxy.cn,direct"
+
+ENV CGO_ENABLED=0
+
+ENV GO111MODULE=on
+
+LABEL stage=stage-bin-build
+
+WORKDIR /build/kubepi/bin
+
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+COPY --from=web-kubepi /build/kubepi/cmd/server/web/kubepi ./cmd/server/web/kubepi
+COPY --from=web-dashboard /build/kubepi/cmd/server/web/dashboard ./cmd/server/web/dashboard
+COPY --from=web-terminal /build/kubepi/cmd/server/web/terminal ./cmd/server/web/terminal
+
+RUN make build_gotty
+RUN make build_bin
