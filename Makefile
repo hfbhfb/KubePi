@@ -19,11 +19,10 @@ tmp:
 my_all: 
 	@echo "first rsync ; and to newdir "
 	#rsync -avh --progress /d/projs/fork8sdir/code-ref/kube-pi /d/tmp/forbuild/
-	cd /d/tmp/forbuild/kube-pi; git pull; make clean -f prepare-Makefile;  make norunhere324334288
+	cd /d/tmp/forbuild/kube-pi;  make clean -f prepare-Makefile;  git pull origin capture; make norunhere324334288
 
 norunhere324334288: my_web_terminal my_web_dashboard my_web_kubepi my_bin_go my_final_docker
 	@echo "finish all"
-
 
 my_final_docker:
 	docker build -f Dockerfile-final -t kubeoperator/final-docker-kubepi:master .
