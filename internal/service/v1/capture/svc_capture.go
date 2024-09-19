@@ -1,9 +1,10 @@
 package capture
 
 import (
+	"fmt"
+
 	v1Capture "github.com/KubeOperator/kubepi/internal/model/v1/capture"
 	"github.com/KubeOperator/kubepi/internal/service/v1/common"
-	"github.com/google/uuid"
 )
 
 type Service interface {
@@ -35,9 +36,10 @@ func (c *captureSvc) GetConfig(capture *v1Capture.Capture, options common.DBOpti
 	}
 	if len(capturelist) == 0 {
 		tmp1 := v1Capture.Capture{}
-		tmp1.Config.DefaultImg = "aaa"
-		tmp1.Name = "default"
-		tmp1.UUID = uuid.New().String()
+		// tmp1.Config.DefaultImg = "aaa"
+		tmp1.Id = "default"
+		// tmp1.Name = "default"
+		// tmp1.UUID = uuid.New().String()
 		db.Save(&tmp1)
 		capturelist = append(capturelist, tmp1)
 	}
@@ -61,14 +63,19 @@ func (c *captureSvc) PostConfig(capture *v1Capture.Capture, options common.DBOpt
 
 func (c *captureSvc) Clean(options common.DBOptions) error {
 	db := c.GetDB(options)
-	err := db.Drop(v1Capture.Capture{})
+	// fmt.Println("clean")
+	err := db.Drop(&v1Capture.Capture{})
 	if err != nil {
-		return err
+		fmt.Println(err)
+		// return err
 	}
-	err = db.Drop(v1Capture.Task{})
+	err = db.Drop(&v1Capture.Task{}) //db.Drop("Task")
 	if err != nil {
-		return err
+		fmt.Println(err)
+
+		// return err
 	}
+
 	return nil
 
 }
